@@ -72,6 +72,7 @@ def filehandler(ratio,path):
     print(len(itemlist))
     for s in itemlist:
         print(s.childNodes[0].nodeValue, end="")
+    print()
     for s in itemlist:
         mod = s.childNodes[0].nodeValue
         mod = int(float(mod))
@@ -81,6 +82,7 @@ def filehandler(ratio,path):
         s.childNodes[0].nodeValue = mod
     for s in itemlist:
         print(s.childNodes[0].nodeValue, end="")
+    print()
         
     shutil.copy2(path + "\Cubeblocks.sbc", path + "\Cubeblocks.sbc.bak")
     cuberead = open(path + "\Cubeblocks.sbc.bak", "r")
@@ -96,7 +98,11 @@ def filehandler(ratio,path):
         else:
             print(line, end='', file=cubewrite)
             print("LinePost", end='')
+    print()
     cubewrite.close()
     cuberead.close()
-        
+    print("Done!")
+    time.sleep(2)
+    print("GoodBye!")
+    time.sleep(1)
 ui()
