@@ -10,15 +10,11 @@ import shutil
 import time
 import sys
 from xml.dom import minidom
+import logging
 
-# This is d.py
-import logging, logging.handlers
-
-# Make a global logging object.
 x = logging.getLogger("log")
 x.setLevel(logging.DEBUG)
 
-# This handler writes everything to a file.
 h1 = logging.FileHandler("debug.log")
 f = logging.Formatter("%(levelname)s %(asctime)s %(funcName)s %(lineno)d %(message)s")
 h1.setFormatter(f)
@@ -43,7 +39,7 @@ try:
         print('/////Catalyse////////////// | |    _   _| |__   ___| |_) | | ___   ___| | _____  | \  / | ___   __| |_| |_ _  ___ _ __ ///////////////////////////')
         print("/////////////////////////// | |   | | | | '_ \ / _ \  _ <| |/ _ \ / __| |/ / __| | |\/| |/ _ \ / _` | |  _| |/ _ \ '__|///////////////////////////")
         print('/////////////////////////// | |___| |_| | |_) |  __/ |_) | | (_) | (__|   <\__ \ | |  | | (_) | (_| | | | | |  __/ |   ///////////////////////////')
-        print('////////Ver-0.5a///////////  \_____\__,_|_.__/ \___|____/|_|\___/ \___|_|\_\___/ |_|  |_|\___/ \__,_|_|_| |_|\___|_|   ///////Rev-21Apr14/////////')
+        print('////////Ver-0.5b///////////  \_____\__,_|_.__/ \___|____/|_|\___/ \___|_|\_\___/ |_|  |_|\___/ \__,_|_|_| |_|\___|_|   ///////Rev-21Apr14/////////')
         print('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////')
         return
     
@@ -121,32 +117,23 @@ try:
     def filehandler(ratio,path):
         if ratio < 1:
             ratio = 1/ratio
-        print("This program is going to print a whole bunch of statements very quickly now, this is normal and part of testing, it will be removed soon.")
         time.sleep(2)
         xmldoc = minidom.parse(path + "\Cubeblocks.sbc")
         itemlist = xmldoc.getElementsByTagName('BuildTimeSeconds') 
-        print(len(itemlist))
-        for s in itemlist:
-            print(s.childNodes[0].nodeValue, end="")
-        print()
         for s in itemlist:
             mod = s.childNodes[0].nodeValue
             mod = int(float(mod))
             mod = mod/ratio
             mod = int(mod)
-            mod = str(mod)
             if(mod <.5):
                 mod = .5
+            mod = str(mod)
             s.childNodes[0].nodeValue = mod
-        for s in itemlist:
-            print(s.childNodes[0].nodeValue, end="")
-        print()
             
         shutil.copy2(path + "\Cubeblocks.sbc", path + "\Cubeblocks.sbc.bak")
         cuberead = open(path + "\Cubeblocks.sbc.bak", "r")
         cubewrite = open(path + "\Cubeblocks.sbc", "w")
         
-        l=0
         i=0
         print("Modifying your file...")
         for line in cuberead:
