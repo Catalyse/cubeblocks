@@ -59,7 +59,7 @@ try:
         except:
             print("Error Registry entry not found!")
         finally:
-            print("This program is designed for people who PURCHASED the game.  There is a 99% chance that you have pirated this game as steam installs everything in the same place every time.
+            print("This program is designed for people who PURCHASED the game.  There is a 99% chance that you have pirated this game as steam installs everything in the same place every time.")
             print("This game is worth buying, please help the devs!")
             time.sleep(5)
             sys.exit()
