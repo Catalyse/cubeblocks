@@ -28,7 +28,7 @@ x.addHandler(h1)
 try:
     log = logging.getLogger("log")
 
-    logfun.debug("Starting Program!")
+    log.debug("Starting Program!")
     
     def cls():
         os.system(['clear','cls'][os.name == 'nt'])
@@ -167,5 +167,5 @@ try:
         sys.exit()
     ui()
 except:
-    logfun.exception("Well shit something broke")
-    logfun.debug("Program Finished!")
+    log.exception("Well shit something broke")
+    log.debug("Program Finished!")
