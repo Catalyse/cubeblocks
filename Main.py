@@ -8,26 +8,27 @@ import os
 import winreg
 import shutil
 import time
+import sys
 from xml.dom import minidom
 
 # This is d.py
 import logging, logging.handlers
 
 # Make a global logging object.
-x = logging.getLogger("logfun")
+x = logging.getLogger("log")
 x.setLevel(logging.DEBUG)
 
 # This handler writes everything to a file.
-h1 = logging.FileHandler("myapp.log")
+h1 = logging.FileHandler("debug.log")
 f = logging.Formatter("%(levelname)s %(asctime)s %(funcName)s %(lineno)d %(message)s")
 h1.setFormatter(f)
 h1.setLevel(logging.DEBUG)
 x.addHandler(h1)
 
 try:
-    logfun = logging.getLogger("logfun")
+    log = logging.getLogger("log")
 
-    logfun.debug("Inside f!")
+    logfun.debug("Starting Program!")
     
     def cls():
         os.system(['clear','cls'][os.name == 'nt'])
@@ -47,13 +48,21 @@ try:
         return
     
     def regget():
-        registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
-        key = winreg.OpenKey(registry, "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 244850")
-        
-        value = winreg.QueryValueEx(key, "InstallLocation")
-        winreg.CloseKey(key)
-        winreg.CloseKey(registry)
-        return value[0]
+        try:
+            registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+            key = winreg.OpenKey(registry, "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 244850")
+            
+            value = winreg.QueryValueEx(key, "InstallLocation")
+            winreg.CloseKey(key)
+            winreg.CloseKey(registry)
+            return value[0]
+        except:
+            print("Error Registry entry not found!")
+        finally:
+            print("This program is designed for people who PURCHASED the game.  There is a 99% chance that you have pirated this game as steam installs everything in the same place every time.
+            print("This game is worth buying, please help the devs!")
+            time.sleep(5)
+            sys.exit()
     
     def dirpath():
         value = regget()
@@ -64,6 +73,7 @@ try:
         
         print("Does the path above look correct?")
         print("Make sure it doesn't have extra slashes!")
+        print("If it is not correct you can manually type it in after your response.")
         response = str(input("Correct? y or n:  "))
         if response == "y" or response == "Y":
             return value
@@ -71,6 +81,8 @@ try:
             print()
             print("Please provide the directory of your steam installation(where Space Engineers is installed)")
             print("Example: 'C:\Program Files (x86)\Steam' for now we need the full directory!")
+            print()
+            print("It is important to use colons : not semi-colons ; and to use brackets (), not arrows <>")
             dirpath = str(input())
             dirpath = (dirpath+"\SteamApps\common\SpaceEngineers\Content\Data")
             print(dirpath)
@@ -83,7 +95,10 @@ try:
             
     def ratio():
         print("Now we need to pick the ratio at which you'd like to reduce the times")
-        print("You can write the ratio either way, 1/3 = .33 or 3")
+        print("You can write the ratio either way. Eg: To cut the build time by 1/3 = .33 or 3")
+        print()
+        print("It is important to note that 1/3 or any fraction is NOT a valid response to this.")
+        print("It MUST be a decimal or whole number")
         no = float(input("Please type your number here!  "))
         return no
             
@@ -94,6 +109,7 @@ try:
         print()
         print("Lets begin!")
         print()
+        time.sleep(3)
         pa = dirpath()
         titleScreen()
         print()
@@ -120,6 +136,8 @@ try:
             mod = mod/ratio
             mod = int(mod)
             mod = str(mod)
+            if(mod <.5):
+                mod = .5
             s.childNodes[0].nodeValue = mod
         for s in itemlist:
             print(s.childNodes[0].nodeValue, end="")
@@ -129,24 +147,25 @@ try:
         cuberead = open(path + "\Cubeblocks.sbc.bak", "r")
         cubewrite = open(path + "\Cubeblocks.sbc", "w")
         
+        l=0
         i=0
-        print("Loopstart")
+        print("Modifying your file...")
         for line in cuberead:
             if "<BuildTimeSeconds>" in line:
                 print("      <BuildTimeSeconds>"+itemlist[i].childNodes[0].nodeValue+"</BuildTimeSeconds>" + '\n', end='', file=cubewrite)
                 i = i+1
-                print('BuildTimeEdit', end='')
             else:
                 print(line, end='', file=cubewrite)
-                print("LinePost", end='')
         print()
         cubewrite.close()
         cuberead.close()
         print("Done!")
         time.sleep(2)
         print("GoodBye!")
-        time.sleep(1)
+        print("Press enter to close")
+        input()
+        sys.exit()
     ui()
 except:
-    logfun.exception("Something awful happened!")
-    logfun.debug("Finishing f!")
+    logfun.exception("Well shit something broke")
+    logfun.debug("Program Finished!")
